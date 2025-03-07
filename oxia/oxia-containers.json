@@ -1,0 +1,619 @@
+{
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "panels": [
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 41,
+      "panels": [],
+      "repeat": "pod",
+      "targets": [
+        {
+          "refId": "A"
+        }
+      ],
+      "title": "$pod",
+      "type": "row"
+    },
+    {
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineStyle": {
+              "fill": "solid"
+            },
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "line"
+            }
+          },
+          "links": [],
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "transparent",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 100
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 6,
+        "x": 0,
+        "y": 1
+      },
+      "id": 4,
+      "links": [],
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "editorMode": "code",
+          "expr": "100 * sum(   rate(container_cpu_user_seconds_total{namespace=~\"$namespace\", pod=~\"$pod\", container !=\"\"}[5m])) by (pod)",
+          "legendFormat": "user",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "editorMode": "code",
+          "expr": "100 * sum(   rate(container_cpu_cfs_throttled_seconds_total{namespace!~\"kube-system\", pod=\"$pod\", container!=\"\"}[5m])) by (pod)",
+          "hide": false,
+          "legendFormat": "throttled",
+          "range": true,
+          "refId": "B"
+        },
+        {
+          "editorMode": "code",
+          "expr": "100 * sum(rate(container_cpu_system_seconds_total{namespace!~\"kube-system\", pod=\"$pod\", container !=\"\"}[5m])) by (pod)",
+          "hide": false,
+          "legendFormat": "system",
+          "range": true,
+          "refId": "C"
+        }
+      ],
+      "title": "CPU usage",
+      "type": "timeseries"
+    },
+    {
+      "description": "container_spec_memory_limit_bytes = 0 mean no resource limits configured for this container.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "links": [],
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "decbytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 6,
+        "x": 6,
+        "y": 1
+      },
+      "id": 1,
+      "links": [],
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "editorMode": "code",
+          "exemplar": true,
+          "expr": "sum(container_memory_rss{namespace=~\"$k8s_namespace\", pod=\"$pod\", container!=\"\"})",
+          "interval": "",
+          "legendFormat": "RSS",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "editorMode": "code",
+          "exemplar": true,
+          "expr": "sum(container_memory_swap{namespace=~\"$k8s_namespace\", pod=\"$pod\", container!=\"\"}) by (pod)",
+          "interval": "",
+          "legendFormat": "Swap",
+          "range": true,
+          "refId": "B"
+        },
+        {
+          "editorMode": "code",
+          "exemplar": true,
+          "expr": "sum(container_spec_memory_limit_bytes{namespace=~\"$k8s_namespace\", pod=\"$pod\", container!~\"(|POD|istio-proxy)\"}) by (pod)",
+          "interval": "",
+          "legendFormat": "Limit",
+          "range": true,
+          "refId": "C"
+        },
+        {
+          "editorMode": "code",
+          "exemplar": true,
+          "expr": "sum(container_spec_memory_reservation_limit_bytes{namespace=~\"$k8s_namespace\", pod=\"$pod\", container!=\"\"}) by (pod)",
+          "interval": "",
+          "legendFormat": "Reserved",
+          "range": true,
+          "refId": "D"
+        },
+        {
+          "editorMode": "code",
+          "exemplar": true,
+          "expr": "sum(container_memory_working_set_bytes{namespace=~\"$k8s_namespace\", pod=\"$pod\", container!=\"\"}) by (pod)",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "Working_set",
+          "range": true,
+          "refId": "E"
+        },
+        {
+          "editorMode": "code",
+          "exemplar": true,
+          "expr": "sum(container_memory_cache{namespace=~\"$k8s_namespace\", pod=\"$pod\", container!=\"\"}) by (pod)",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "Cache",
+          "range": true,
+          "refId": "F"
+        }
+      ],
+      "title": "Memory",
+      "type": "timeseries"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "links": [],
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "bps"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "old count"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "short"
+              },
+              {
+                "id": "min",
+                "value": 0
+              },
+              {
+                "id": "custom.axisPlacement",
+                "value": "hidden"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "young count"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "short"
+              },
+              {
+                "id": "min",
+                "value": 0
+              },
+              {
+                "id": "custom.axisPlacement",
+                "value": "hidden"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 6,
+        "x": 12,
+        "y": 1
+      },
+      "id": 3,
+      "links": [],
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "editorMode": "code",
+          "exemplar": true,
+          "expr": "8 * sum(rate(container_network_receive_bytes_total{namespace=~\"$k8s_namespace\", pod=~\"$pod\"}[5m])) by (pod)",
+          "interval": "",
+          "legendFormat": "In",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "editorMode": "code",
+          "exemplar": true,
+          "expr": "- 8 * sum(rate(container_network_transmit_bytes_total{namespace=~\"$k8s_namespace\", pod=~\"$pod\"}[5m])) by (pod)",
+          "interval": "",
+          "legendFormat": "Out",
+          "range": true,
+          "refId": "B"
+        }
+      ],
+      "title": "Network",
+      "type": "timeseries"
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "fieldConfig": {
+        "defaults": {
+          "links": []
+        },
+        "overrides": []
+      },
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 6,
+        "w": 6,
+        "x": 18,
+        "y": 1
+      },
+      "hiddenSeries": false,
+      "id": 63,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": false,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [
+        {
+          "alias": "old count",
+          "yaxis": 2
+        },
+        {
+          "alias": "young count",
+          "yaxis": 2
+        }
+      ],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "editorMode": "code",
+          "exemplar": true,
+          "expr": "sum(rate(container_fs_writes_bytes_total{namespace=~\"$k8s_namespace\", pod=~\"$pod\", container!=\"\"}[5m])) by (pod,device)",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "Writes {{ device }}",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "editorMode": "code",
+          "exemplar": true,
+          "expr": "- sum(rate(container_fs_reads_bytes_total{namespace=~\"$k8s_namespace\", pod=~\"$pod\", container!=\"\"}[5m])) by (pod,device)",
+          "interval": "",
+          "legendFormat": "Reads {{ device }}",
+          "range": true,
+          "refId": "B"
+        }
+      ],
+      "thresholds": [],
+      "timeRegions": [],
+      "title": "Disk",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "mode": "time",
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "Bps",
+          "label": "",
+          "logBase": 1,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": "",
+          "logBase": 1,
+          "min": "0",
+          "show": false
+        }
+      ],
+      "yaxis": {
+        "align": false
+      }
+    }
+  ],
+  "refresh": "30s",
+  "schemaVersion": 37,
+  "style": "dark",
+  "tags": [
+    "oxia"
+  ],
+  "templating": {
+    "list": [
+      {
+        "current": {},
+        "definition": "label_values(oxia_coordinator_node_running, oxia_cluster)",
+        "hide": 0,
+        "includeAll": false,
+        "label": "Cluster",
+        "multi": false,
+        "name": "cluster",
+        "options": [],
+        "query": {
+          "query": "label_values(oxia_coordinator_node_running, oxia_cluster)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      },
+      {
+        "current": {},
+        "definition": "process_resident_memory_bytes{oxia_cluster=~\"$cluster\"}",
+        "description": "kubernetes_namespace",
+        "hide": 2,
+        "includeAll": false,
+        "label": "namespace",
+        "multi": false,
+        "name": "k8s_namespace",
+        "options": [],
+        "query": {
+          "query": "process_resident_memory_bytes{oxia_cluster=~\"$cluster\"}",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 1,
+        "regex": "/.*kubernetes_namespace=\"([^\"]*).*/",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      },
+      {
+        "current": {
+          "text": "All",
+          "value": "$__all"
+        },
+        "definition": "grpc_server_handled_total{oxia_cluster=~\"$cluster\"}",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Component",
+        "multi": true,
+        "name": "component",
+        "options": [],
+        "query": {
+          "query": "grpc_server_handled_total{oxia_cluster=~\"$cluster\"}",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 1,
+        "regex": "/.*app_kubernetes_io_component=\"([^\"]*).*/",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      },
+      {
+        "current": {
+          "text": "All",
+          "value": "$__all"
+        },
+        "definition": "process_cpu_seconds_total{oxia_cluster=~\"$cluster\", app_kubernetes_io_component=~\"$component\", kubernetes_namespace=~\"$k8s_namespace\"}",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Pod",
+        "multi": true,
+        "name": "pod",
+        "options": [],
+        "query": {
+          "query": "process_cpu_seconds_total{oxia_cluster=~\"$cluster\", app_kubernetes_io_component=~\"$component\", kubernetes_namespace=~\"$k8s_namespace\"}",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 1,
+        "regex": "/.*kubernetes_pod_name=\"([^\"]*).*/",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-15m",
+    "to": "now"
+  },
+  "timezone": "utc",
+  "title": "Oxia - Containers Metrics",
+  "uid": "znvqEsBmu",
+  "weekStart": ""
+}
