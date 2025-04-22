@@ -645,7 +645,7 @@
         },
         "overrides": []
       },
-      "format": "decbytes",
+      "format": "short",
       "gauge": {
         "maxValue": 100,
         "minValue": 0,
