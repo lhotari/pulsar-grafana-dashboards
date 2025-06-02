@@ -74,13 +74,13 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "pulsar_ledgeroffloader_writeError{cluster=~\"$cluster\",namespace=~\"$namespace\",job=~\"$job\"}",
+          "expr": "pulsar_ledgeroffloader_write_storage_error{cluster=~\"$cluster\",namespace=~\"$namespace\",job=~\"$job\"}",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
         }
       ],
-      "title": "pulsar_ledgeroffloader_writeError",
+      "title": "Number of failed operations to write to storage",
       "type": "timeseries"
     },
     {
@@ -155,13 +155,13 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "pulsar_ledgeroffloader_readLedgerLatencyBuckets{cluster=~\"$cluster\",namespace=~\"$namespace\",job=~\"$job\"}",
+          "expr": "pulsar_ledgeroffloader_read_ledger_latency{cluster=~\"$cluster\",namespace=~\"$namespace\",job=~\"$job\"}",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
         }
       ],
-      "title": "pulsar_ledgeroffloader_readLedgerLatencyBuckets",
+      "title": "Latency of reading entries from BookKeeper",
       "type": "timeseries"
     },
     {
@@ -235,13 +235,13 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "pulsar_ledgeroffloader_readOffloadError{cluster=~\"$cluster\",namespace=~\"$namespace\",job=~\"$job\"}",
+          "expr": "pulsar_ledgeroffloader_read_offload_error{cluster=~\"$cluster\",namespace=~\"$namespace\",job=~\"$job\"}",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
         }
       ],
-      "title": "pulsar_ledgeroffloader_readOffloadError",
+      "title": "Number of failed operations to read offload ledgers",
       "type": "timeseries"
     },
     {
@@ -395,13 +395,13 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "pulsar_ledgeroffloader_offloadError{cluster=~\"$cluster\",namespace=~\"$namespace\",job=~\"$job\"}",
+          "expr": "pulsar_ledgeroffloader_offload_error{cluster=~\"$cluster\",namespace=~\"$namespace\",job=~\"$job\"}",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
         }
       ],
-      "title": "pulsar_ledgeroffloader_offloadError",
+      "title": "Number of failed operations to offload",
       "type": "timeseries"
     },
     {
@@ -475,13 +475,13 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "pulsar_ledgeroffloader_readOffloadRate{cluster=~\"$cluster\",namespace=~\"$namespace\",job=~\"$job\"}",
+          "expr": "pulsar_ledgeroffloader_offload_rate{cluster=~\"$cluster\",namespace=~\"$namespace\",job=~\"$job\"}",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
         }
       ],
-      "title": "pulsar_ledgeroffloader_readOffloadRate",
+      "title": "The rate of offloading (byte per second)",
       "type": "timeseries"
     }
   ],
@@ -532,7 +532,7 @@
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,
-        "regex": "/.*namespace=\\\"([^\\\"]+)\\\".*/",
+        "regex": "/.*[^_]namespace=\\\"([^\\\"]+)\\\".*/",
         "skipUrlSync": false,
         "sort": 0,
         "type": "query"
