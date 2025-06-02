@@ -1670,7 +1670,7 @@
       },
       "targets": [
         {
-          "expr": "sum(pulsar_storage_read_latency_count{cluster=~\"$cluster\", namespace=\"$tenant/$namespace\"})",
+          "expr": "sum(pulsar_storage_read_rate{cluster=~\"$cluster\", namespace=\"$tenant/$namespace\"})",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 2,
